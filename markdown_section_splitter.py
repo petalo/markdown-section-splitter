@@ -96,9 +96,6 @@ class MarkdownSplitter:
         # Replace spaces and colons with hyphens
         anchor = re.sub(r"[\s:]+", "-", anchor)
 
-        # Replace multiple consecutive hyphens with single hyphen
-        anchor = re.sub(r"-+", "-", anchor)
-
         # Remove leading/trailing hyphens
         anchor = anchor.strip("-")
 
@@ -236,18 +233,22 @@ class MarkdownSplitter:
 
         for line_num, line in enumerate(self.content, 1):
             line = line.strip()
-            
+
             # Check if we're entering or leaving a code block
             if line.startswith("```"):
                 in_code_block = not in_code_block
                 if self.debug:
-                    print(f"🔍 DEBUG: Code block {'started' if in_code_block else 'ended'} at line {line_num}")
+                    print(
+                        f"🔍 DEBUG: Code block {'started' if in_code_block else 'ended'} at line {line_num}"
+                    )
                 continue
 
             # Skip header detection if we're inside a code block
             if in_code_block:
                 if self.debug and line.startswith("## "):
-                    print(f"🔍 DEBUG: Ignoring header in code block at line {line_num}: {line}")
+                    print(
+                        f"🔍 DEBUG: Ignoring header in code block at line {line_num}: {line}"
+                    )
                 continue
 
             if line.startswith("## ") and not line.startswith("## Table of Contents"):

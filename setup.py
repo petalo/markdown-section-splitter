@@ -8,7 +8,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="markdown-section-splitter",
-    version="0.5.0",
+    version="0.5.1",
     author="Diego Mariño",
     author_email="diegomarino@users.noreply.github.com",
     description="A tool to split large markdown files into organized sections",

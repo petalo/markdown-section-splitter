@@ -84,6 +84,15 @@ Final section without number.
         
         # Test with multiple spaces
         self.assertEqual(splitter.create_toc_anchor("Section    Name"), "section-name")
+        
+        # Test headers with hyphens in the name (the real issue)
+        self.assertEqual(splitter.create_toc_anchor("16.1.1 Unit Testing - Core Services"), "1611-unit-testing---core-services")
+        self.assertEqual(splitter.create_toc_anchor("16.1.2 Integration Testing - End-to-End"), "1612-integration-testing---end-to-end")
+        self.assertEqual(splitter.create_toc_anchor("16.1.3 Load Testing - Performance"), "1613-load-testing---performance")
+        
+        # Test other cases with hyphens
+        self.assertEqual(splitter.create_toc_anchor("Section - Subsection"), "section---subsection")
+        self.assertEqual(splitter.create_toc_anchor("Multi - Word - Title"), "multi---word---title")
 
     def test_analyze_sections(self):
         """Test section analysis."""
@@ -955,6 +964,48 @@ The end.
             self.assertEqual(sections[0].title, "Before Code Block")
             self.assertEqual(sections[1].title, "After Code Block")
             self.assertEqual(sections[2].title, "Final Section")
+
+    def test_numbered_subsections_toc_links(self):
+        """Test that numbered subsections generate correct TOC links."""
+        content = """# Main Document
+
+## 16. Testing Strategy
+Content for main section.
+
+### 16.1.1 Unit Testing - Core Services
+Unit testing content.
+
+### 16.1.2 Integration Testing - End-to-End
+Integration testing content.
+
+### 16.1.3 Load Testing - Performance
+Load testing content.
+"""
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
+            f.write(content)
+            f.flush()
+            
+            splitter = MarkdownSplitter(f.name)
+            processed_lines, toc_entries = splitter.extract_section_content(
+                Section(
+                    title="16. Testing Strategy",
+                    start_line=3,
+                    end_line=15,
+                    level=2,
+                    filename="16-testing-strategy.md",
+                    anchor="16-testing-strategy",
+                    subsections=[]
+                )
+            )
+            
+            # Check that TOC entries have correct anchors
+            expected_toc_entries = [
+                "- [16.1.1 Unit Testing - Core Services](#1611-unit-testing---core-services)",
+                "- [16.1.2 Integration Testing - End-to-End](#1612-integration-testing---end-to-end)",
+                "- [16.1.3 Load Testing - Performance](#1613-load-testing---performance)"
+            ]
+            
+            self.assertEqual(toc_entries, expected_toc_entries)
 
 
 if __name__ == "__main__":
