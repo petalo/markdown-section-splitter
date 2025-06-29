@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "markdown-section-splitter"
+version = "0.5.0"
+description = "A tool to split large markdown files into organized sections"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Diego Mariño", email = "diegomarino@users.noreply.github.com"}
+]
+maintainers = [
+    {name = "Diego Mariño", email = "diegomarino@users.noreply.github.com"}
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Documentation",
+    "Topic :: Software Development :: Documentation",
+    "Topic :: Text Processing :: Markup",
+]
+keywords = ["markdown", "documentation", "splitter", "toc"]
+requires-python = ">=3.6"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0.0",
+    "black>=22.0.0",
+    "flake8>=4.0.0",
+    "mypy>=0.910",
+]
+
+[project.urls]
+Homepage = "https://github.com/petalo/markdown-section-splitter"
+Repository = "https://github.com/petalo/markdown-section-splitter"
+"Bug Reports" = "https://github.com/petalo/markdown-section-splitter/issues"
+Documentation = "https://github.com/petalo/markdown-section-splitter#readme"
+
+[project.scripts]
+markdown-splitter = "markdown_section_splitter:main"
+
+[tool.setuptools]
+py-modules = ["markdown_section_splitter"]
+
+[tool.black]
+line-length = 88
+target-version = ['py36']
+
+[tool.mypy]
+python_version = "3.6"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
